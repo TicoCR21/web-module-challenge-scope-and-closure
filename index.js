@@ -14,10 +14,12 @@
  * Invoking `processFirstItem` passing `['foo', 'bar']` and `(str) => str + str`,
  * should return 'foofoo'.
 */
-function processFirstItem(stringList, callback) {
-  return callback(stringList[0])
-}
 
+let processString = str => str + str;
+
+let processFirstItem = ( stringList, callback ) => callback( stringList[ 0 ] );
+
+console.log( processFirstItem( [ 'foo', 'bar' ], processString ) );
 // ⭐️ Example Challenge END ⭐️
 
 
@@ -27,11 +29,20 @@ function processFirstItem(stringList, callback) {
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
  * 1. What is the difference between counter1 and counter2?
+ *    
+ *    Counter2 keeps a global counter. 
+ *    Counter1 utilizes closure; therefore, we could have designate counters;
  * 
  * 2. Which of the two uses a closure? How can you tell?
+ *    
+ *    Counter1 uses closure. The function counter is returned.
  * 
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
  *
+ *    Counter1 could be use to keep track of independent counters. Counter2 keeps a general counter.
+ * 
+ *    For example, given a jar full of colorful bouncing balls counter1 could be use to keep track of how many red, blue and yellow balls are in the jar. While counter2 could 
+ *    be used to get the total number of balls in the jar.
 */
 
 // counter1 code
@@ -52,15 +63,12 @@ function counter2() {
 }
 
 
+
+
 /* Task 2: inning() 
 
 Write a function called `inning` that generates a random number of points that a team scored in an inning. This should be a whole number between 0 and 2. */
-
-function inning(/*Code Here*/){
-
-    /*Code Here*/
-
-}
+let inning = ( ) => Math.floor( Math.random() * 3 );
 
 /* Task 3: finalScore()
 
@@ -76,11 +84,20 @@ finalScore(inning, 9) might return:
 
 */ 
 
-function finalScore(/*code Here*/){
+function finalScore( inning_callback, number_of_innings )
+{
+  let finalScores = { "Home" : 0, "Away" : 0 };
 
-  /*Code Here*/
-
+  for( let i = 0; i < number_of_innings; i++ )
+  {
+    finalScores[ "Home" ] += inning_callback();
+    finalScores[ "Away" ] += inning_callback();
+  }
+  
+  return finalScores;
 }
+
+console.log( finalScore( inning, 9 ) );
 
 /* Task 4: 
 
@@ -104,8 +121,32 @@ and returns the score at each pont in the game, like so:
 
 Final Score: awayTeam - homeTeam */
 
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+function ordinalSuffix( number )
+{
+  let remainders = [ number % 10, number % 100 ];
+  let ordinals = [ "st", "nd", "rd", "th" ];
+  let onesPattern = [ 1, 2, 3, 4 ];
+  let tenthPattern = [ 11, 12, 13, 14, 15, 16, 17, 18, 19 ];
+  return ( onesPattern.includes( remainders[ 0 ] ) && !tenthPattern.includes( remainders[ 1 ] ) ? number + ordinals[ remainders[ 0 ] - 1 ] : number + ordinals[ 3 ] );
 }
 
+let getInningScore = ( inning ) => ( { Home : inning(), Away : inning() } );
 
+function scoreboard( getInningScore, inning, innings ) 
+{
+  let finalScores = { Home : 0, Away : 0 };
+  
+  console.log( '# inning: Away Team - Home Team' );
+  
+  for( let i = 1; i <= innings; i++ )
+  {
+    let currentInning = getInningScore( inning );
+    console.log( `${ ordinalSuffix( i ) } inning: ${ currentInning[ "Away" ] } - ${ currentInning[ "Home" ] }` );
+    finalScores[ "Away" ] += currentInning[ "Away" ];
+    finalScores[ "Home" ] += currentInning[ "Home" ];
+  }
+
+  console.log( `\nFinal Score: ${ finalScores[ "Away" ] } - ${ finalScores[ "Home" ] }` );
+}
+
+scoreboard( getInningScore, inning, 9 );
