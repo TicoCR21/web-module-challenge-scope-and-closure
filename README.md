@@ -42,6 +42,8 @@ Find the file `index.js` and complete the tasks.
 Edit the `ReadMe` file with your answers.
 
 1. In your own words, define closure (1-2 sentences).
+    Closure provides access to inner functions of an outer function out of scope.
+
 2. Study the following code, then answer the questions below.
 
 ```js
@@ -63,8 +65,14 @@ dansRoll();
 ```
 
 a. Where is closure used in this code? How can you tell?
+    The first statement is returning a function.
 b. Compare and contrast calling `dansRoll` the first and second time. What is always the same? What could change?
+  
+  The name remains constant but the roll may change.
+
 c. What is the lexical scope of `newRoll`? 
+  Just inside the inner function personalDice
+
 
 ### Task 3 - Stretch Goals
 
